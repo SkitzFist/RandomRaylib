@@ -1,5 +1,5 @@
 obj/
-.vscode/
+vscode/
 
-.exe
-.code-workspace
+*.exe
+*.code-workspace
