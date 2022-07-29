@@ -1,14 +1,16 @@
 #include "game.h"
-#include "include/raylib.h"
-#include "ray.h"
 #include "Log.h"
+
 
 Game::Game(){
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Intrusion");
     SetTargetFPS(60);
+    grid = new Grid({5000,5000});
+    m_player = new Player(Vec2(50.f,50.f), 10.f, 100.f);
 }
 
 Game::~Game(){
+    delete m_player;
     delete grid;
 }
 
@@ -38,12 +40,14 @@ void Game::handleInput(){
 
 void Game::update(){
     float dt = GetFrameTime();
+    m_player->update(dt);
 }
 
 void Game::render(){
     ClearBackground(BLACK);
     BeginDrawing();
         grid->draw(mousePos);
+        m_player->draw();
         DrawText(std::to_string(GetFPS()).c_str(), 50, 50, 50, RAYWHITE);
     EndDrawing();
 }

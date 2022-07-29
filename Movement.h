@@ -6,8 +6,10 @@
 
 class Movement{
 public:
-    virtual const Vec2<float>& move(float dt, const Vec2<float>& _pos, 
-                                    const Vec2<float>& _dir, float _speed) const;
+    virtual ~Movement();
+    virtual const Vec2<float> move(float dt, const Vec2<float>& _pos, 
+                                const Vec2<float>& _dir, float _speed) const = 0;
+protected:
+    Movement() = default;
 };
-
 #endif
