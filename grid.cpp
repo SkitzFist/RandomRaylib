@@ -260,12 +260,10 @@ const bool Grid::hasNeighbourEdge(Cell* neighbour, int direction)const{
     return neighbour->edgeExists[direction];
 }
 
-void Grid::findVisibility(float ox, float oy){
+void Grid::findVisibility(float ox, float oy, float radius){
     visibilityPoints.clear();
 
-    const float RADIUS = 500.f;
-    
-    std::unordered_set<TargetPoint,TargetPoint::HashFunction> edgePoints = getUniquePoints(ox, oy, RADIUS);
+    std::unordered_set<TargetPoint,TargetPoint::HashFunction> edgePoints = getUniquePoints(ox, oy, radius);
     for(const auto& edgePoint : edgePoints){
             float base_Ang = atan2f(edgePoint.y - oy , edgePoint.x - ox);
             float ang = 0.f;
@@ -275,7 +273,7 @@ void Grid::findVisibility(float ox, float oy){
                 if(j == 2){ang = base_Ang + 0.0001;}
                 VisibilityPoint point;
                 point.angle = ang;
-                point.pos = Line::getIntersection(Vector2i{static_cast<int>(ox), static_cast<int>(oy)}, ang, this, RADIUS);
+                point.pos = Line::getIntersection(Vector2i{static_cast<int>(ox), static_cast<int>(oy)}, ang, this, radius);
                 visibilityPoints.emplace_back(point);
             }
     }

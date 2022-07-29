@@ -97,7 +97,7 @@ public:
     const bool cellExists(const Vector2i& pos) const;
 
     void flipCell(Vector2 point);
-    void findVisibility(float ox, float oy);
+    void findVisibility(float ox, float oy, float radius);
     
 private:
     Vector2i worldSize;

@@ -32,7 +32,7 @@ void Game::handleInput(){
         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
             grid->flipCell(mousePos);
         }
-        grid->findVisibility(mousePos.x, mousePos.y);
+        grid->findVisibility(mousePos.x, mousePos.y, 500.f);
     }
 }
 
