@@ -5,6 +5,7 @@
 Player::Player(Vec2<float> _pos, float _radius, float _speed) : 
     m_radius(_radius), m_speed(_speed), m_dir(0.f,0.f){
     m_movement = new SimpleMovement();
+    setPos(_pos);
 }
 
 Player::~Player(){

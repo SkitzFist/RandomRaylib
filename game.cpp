@@ -3,10 +3,19 @@
 
 
 Game::Game(){
+    //init
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Intrusion");
     SetTargetFPS(60);
+    
+    //config
     grid = new Grid({5000,5000});
-    m_player = new Player(Vec2(50.f,50.f), 10.f, 100.f);
+
+    Vec2<float> playerPos = {200.f,200.f};
+    float playerRadius = 10.f;
+    float playerSpeed = 100.f;
+    m_player = new Player(playerPos, playerRadius, playerSpeed);
+
+    //debug
 }
 
 Game::~Game(){
