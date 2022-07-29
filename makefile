@@ -22,8 +22,6 @@ $(DEPS):
 clean:
 	del obj\*.o
 	del obj\deps\*.d
-
-fullclean : clean
 	del *.exe
 
 include $(wildcard $(DEPS))
