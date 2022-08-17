@@ -1,10 +1,13 @@
 #pragma once
 #ifndef _grid
 #define _grid
+
 #include <vector>
 #include <unordered_set>
 #include <cstddef>
+
 #include "include/raylib.h"
+#include "Vec2.h"
 
 
 struct Cell{
@@ -14,8 +17,8 @@ struct Cell{
 };
 
 struct Edge{
-    Vector2i start;
-    Vector2i end;
+    Vec2<int> start;
+    Vec2<int> end;
 };
 
 struct TargetPoint{
@@ -45,7 +48,7 @@ struct TargetPoint{
 
 struct VisibilityPoint{ 
     float angle;
-    Vector2 pos;
+    Vec2<float> pos;
 
     const bool operator==(const VisibilityPoint& other) const{
         if(angle == other.angle){
@@ -80,28 +83,27 @@ struct VisibilityPoint{
 
 class Grid{
 public:
-    Grid(Vector2i worldSize);
+    Grid(Vec2<int> worldSize);
     ~Grid();
 
-    void draw(Vector2 mousePos) const;
+    void draw(Vec2<float> mousePos) const;
 
-    const Vector2i getWorldSize() const;
+    const Vec2<int> getWorldSize() const;
     const int getCellSize() const;
 
-    const Vector2i getCellPosition(Vector2 worldPos) const;
-    const Vector2i getCellPosition(Vector2i worldPos) const;
-    const bool isWithinWorldSize(const Vector2i) const;
-    const bool isWithinWorldSize(const Vector2) const;
-    const bool isWithinGridSize(const Vector2) const;
-    const bool isWithinGridSize(const Vector2i) const;
-    const bool cellExists(const Vector2i& pos) const;
+    const Vec2<int> getCellPosition(Vec2<float> worldPos) const;
+    const bool isWithinWorldSize(const Vec2<int>) const;
+    const bool isWithinWorldSize(const Vec2<float>) const;
+    const bool isWithinGridSize(const Vec2<float>) const;
+    const bool isWithinGridSize(const Vec2<int>) const;
+    const bool cellExists(const Vec2<int>& pos) const;
 
-    void flipCell(Vector2 point);
+    void flipCell(Vec2<float> point);
     void findVisibility(float ox, float oy, float radius);
     
 private:
-    Vector2i worldSize;
-    Vector2i gridSize;
+    Vec2<int> worldSize;
+    Vec2<int> gridSize;
     Cell* cells;
     std::vector<Edge> edges;
     std::vector<VisibilityPoint> visibilityPoints;
@@ -116,10 +118,10 @@ private:
 
     void drawCells() const;
     void drawEdges() const;
-    void drawVisibility(Vector2 mousePos) const;
+    void drawVisibility(Vec2<float> mousePos) const;
 
-    const int getIndexFromWorldPos(Vector2 pos) const;
-    const int getIndexFromWorldPos(Vector2i pos) const;
+    const int getIndexFromWorldPos(Vec2<float> pos) const;
+    const int getIndexFromWorldPos(Vec2<int> pos) const;
 
     void findEdges();
     void clearCellSEdgeData();

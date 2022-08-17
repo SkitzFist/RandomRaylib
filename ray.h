@@ -7,22 +7,22 @@
 #include <math.h>
 #include "Log.h"
 
-
 namespace Line{
-    static Vector2 getIntersection(Vector2i _start, float _angle, Grid* grid, float _maxDistance = 100.f){
+    static Vec2<float> getIntersection(Vec2<int> _start, float _angle, Grid* grid, float _maxDistance = 100.f){
         //Log::info("---------RAY--------------");
-        Vector2 start = Vector2{static_cast<float>(_start.x), static_cast<float>(_start.y)};
-        Vector2 dir = Vector2{ cosf(_angle), sinf(_angle)};
+        Vec2<float> start = Vec2<float>{static_cast<float>(_start.x), static_cast<float>(_start.y)};
+        Vec2<float> dir = Vec2<float>{ cosf(_angle), sinf(_angle)};
 
-        Vector2 unitStepSize = Vector2{
+        Vec2<float> unitStepSize = Vec2<float>{
             abs(1.f/ dir.x),
             abs(1.f/ dir.y)
         }; 
         //Log::point("dir: ", dir);
         //Log::point("Stepsize", unitStepSize);
-        Vector2i mapCheck = grid->getCellPosition(_start);
-        Vector2 rayLength = {0.f,0.f};
-        Vector2i mapStep = {0,0};
+        
+        Vec2<int> mapCheck = grid->getCellPosition(start);
+        Vec2<float> rayLength = {0.f,0.f};
+        Vec2<int> mapStep = {0,0};
         //Log::point("Mapcheck start", mapCheck );
         if(dir.x < 0){
             mapStep.x = -1;
@@ -75,7 +75,7 @@ namespace Line{
             //Log::info("FoundTile: false");
         }
         
-        Vector2 point{
+        Vec2<float> point{
             start.x + (dir.x * distance),
             start.y + (dir.y* distance)
         };

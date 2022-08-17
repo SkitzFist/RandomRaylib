@@ -2,6 +2,7 @@
 
 #include "grid.h"
 #include "Player.h"
+#include "Vec2.h"
 
 class Game {
 public:
@@ -14,7 +15,7 @@ private:
     Grid* grid;
     Player* m_player;
 
-    Vector2 mousePos;
+    Vec2<float> m_mousePos;
 
     void handleInput();
     void update();

@@ -2,6 +2,8 @@
 #ifndef _Vec2
 #define _Vec2
 
+#include "include/raylib.h"
+
 template <class T>
 class Vec2{
 public:

@@ -2,7 +2,8 @@
 #include "Log.h"
 #include "ray.h"
 #include "sort.h"
-#include "random"
+#include "Renderer.h"
+#include "random" // se om denna behövs eller inte
 
 /*
     Optimeringsplan:
@@ -15,7 +16,7 @@
                 2.2.1 måste ändra mapcheck i init värdet för raylength. []
 */
 
-Grid::Grid(Vector2i _worldSize){
+Grid::Grid(Vec2<int> _worldSize){
     worldSize = _worldSize;
     gridSize = {worldSize.x / CELL_SIZE, worldSize.y / CELL_SIZE};
     cells = new Cell[gridSize.x * gridSize.y];
@@ -46,7 +47,7 @@ void Grid::randomTiles(){
     }
 }
 
-void Grid::draw(Vector2 mousePos)const{
+void Grid::draw(Vec2<float> mousePos)const{
     drawCells();
     drawEdges();
     drawVisibility(mousePos);
@@ -68,15 +69,15 @@ void Grid::drawEdges()const{
     }
 }
 
-void Grid::drawVisibility(Vector2 mousePos)const {
+void Grid::drawVisibility(Vec2<float> mousePos)const {
 
     //std::vector<VisibilityPoint*>* pointsWithinReach = getPointsWithinReach(mousePos.x, mousePos.y, 15.f);
     //Log::info("Number of points within reach: " + std::to_string(pointsWithinReach->size()));
     if(visibilityPoints.size() > 0){
         for(int i = 1; i < visibilityPoints.size() - 2; ++i){
-            DrawTriangle(visibilityPoints[i].pos, mousePos,visibilityPoints[i+1].pos, YELLOW);
+            Renderer::drawTriangle(visibilityPoints[i].pos, mousePos,visibilityPoints[i+1].pos, YELLOW);
         }
-        DrawTriangle(visibilityPoints[0].pos, visibilityPoints[visibilityPoints.size() -1].pos, mousePos, YELLOW);
+        Renderer::drawTriangle(visibilityPoints[0].pos, visibilityPoints[visibilityPoints.size() -1].pos, mousePos, YELLOW);
     }
 
    unsigned char red = 0;
@@ -87,13 +88,13 @@ void Grid::drawVisibility(Vector2 mousePos)const {
    }
 }
 
-void Grid::flipCell(Vector2 _point){
+void Grid::flipCell(Vec2<float> _point){
     int index = getIndexFromWorldPos(_point);
     cells[index].exists = !cells[index].exists;
     findEdges();
 }
 
-const Vector2i Grid::getWorldSize() const{
+const Vec2<int> Grid::getWorldSize() const{
     return worldSize;
 }
 
@@ -101,47 +102,40 @@ const int Grid::getCellSize()const{
     return CELL_SIZE;
 }
 
-const int Grid::getIndexFromWorldPos(Vector2 _pos) const{
-    Vector2i iPos = {static_cast<int>(_pos.x), static_cast<int>(_pos.y)};
+const int Grid::getIndexFromWorldPos(Vec2<float> _pos) const{
+    Vec2<int> iPos = {static_cast<int>(_pos.x), static_cast<int>(_pos.y)};
     return getIndexFromWorldPos(iPos);
 }
 
-const int Grid::getIndexFromWorldPos(Vector2i _pos)const{
-    Vector2i gridPos = {_pos.x / CELL_SIZE, _pos.y / CELL_SIZE};
+const int Grid::getIndexFromWorldPos(Vec2<int> _pos)const{
+    Vec2<int> gridPos = {_pos.x / CELL_SIZE, _pos.y / CELL_SIZE};
     return gridPos.y * gridSize.x + gridPos.x;
 }
 
-const Vector2i Grid::getCellPosition(Vector2 worldPos)const{
-    Vector2i pos{static_cast<int>(worldPos.x / CELL_SIZE), static_cast<int>(worldPos.y / CELL_SIZE)};
+const Vec2<int> Grid::getCellPosition(Vec2<float> worldPos)const{
+    Vec2<int> pos{static_cast<int>(worldPos.x / CELL_SIZE), static_cast<int>(worldPos.y / CELL_SIZE)};
     pos.x *= CELL_SIZE;
     pos.y *= CELL_SIZE;
     return pos;
 }
 
-const Vector2i Grid::getCellPosition(Vector2i worldPos) const{
-    Vector2i pos{static_cast<int>(worldPos.x / CELL_SIZE), static_cast<int>(worldPos.y / CELL_SIZE)};
-    pos.x *= CELL_SIZE;
-    pos.y *= CELL_SIZE;
-    return pos;
-}
-
-const bool Grid::isWithinWorldSize(Vector2 pos)const{
+const bool Grid::isWithinWorldSize(Vec2<float> pos)const{
     return pos.x >= 0 && pos.x < worldSize.x && pos.y >= 0 && pos.y < worldSize.y;
 }
 
-const bool Grid::isWithinWorldSize(Vector2i pos)const{
+const bool Grid::isWithinWorldSize(Vec2<int> pos)const{
     return pos.x >= 0 && pos.x < worldSize.x && pos.y >= 0 && pos.y < worldSize.y;
 }
 
-const bool Grid::isWithinGridSize(Vector2 pos)const{
+const bool Grid::isWithinGridSize(Vec2<float> pos)const{
     return pos.x >= 0 && pos.x < gridSize.x && pos.y >= 0 && pos.y < gridSize.y;
 }
 
-const bool Grid::isWithinGridSize(Vector2i pos)const{
+const bool Grid::isWithinGridSize(Vec2<int> pos)const{
     return pos.x >= 0 && pos.x < gridSize.x && pos.y >= 0 && pos.y < gridSize.y;
 }
 
-const bool Grid::cellExists(const Vector2i& pos)const{
+const bool Grid::cellExists(const Vec2<int>& pos)const{
     int index = getIndexFromWorldPos(pos);
     return cells[index].exists;
 }
@@ -170,8 +164,8 @@ void Grid::findEdges(){
                         cell->edgeExists[WEST] = true;
                         cell->edgeID[WEST] = edges.size();
                         edges.emplace_back(Edge{
-                            Vector2i{(x * CELL_SIZE),(y * CELL_SIZE)},//start
-                            Vector2i{(x * CELL_SIZE), (y*CELL_SIZE) + CELL_SIZE} // end
+                            Vec2<int>{(x * CELL_SIZE),(y * CELL_SIZE)},//start
+                            Vec2<int>{(x * CELL_SIZE), (y*CELL_SIZE) + CELL_SIZE} // end
                         });
                     }
                 }
@@ -185,8 +179,8 @@ void Grid::findEdges(){
                         cell->edgeExists[NORTH] = true;
                         cell->edgeID[NORTH] = edges.size();
                         edges.emplace_back(Edge{
-                            Vector2i{(x * CELL_SIZE),(y * CELL_SIZE)},//start
-                            Vector2i{(x * CELL_SIZE) + CELL_SIZE, (y*CELL_SIZE)} // end
+                            Vec2<int>{(x * CELL_SIZE),(y * CELL_SIZE)},//start
+                            Vec2<int>{(x * CELL_SIZE) + CELL_SIZE, (y*CELL_SIZE)} // end
                         });
                     }
                 }
@@ -200,8 +194,8 @@ void Grid::findEdges(){
                         cell->edgeExists[EAST] = true;
                         cell->edgeID[EAST] = edges.size();
                         edges.emplace_back(Edge{
-                            Vector2i{(x * CELL_SIZE) + CELL_SIZE, (y * CELL_SIZE)},//start
-                            Vector2i{(x * CELL_SIZE) + CELL_SIZE, (y*CELL_SIZE) + CELL_SIZE} // end
+                            Vec2<int>{(x * CELL_SIZE) + CELL_SIZE, (y * CELL_SIZE)},//start
+                            Vec2<int>{(x * CELL_SIZE) + CELL_SIZE, (y*CELL_SIZE) + CELL_SIZE} // end
                         });
                     }
                 }
@@ -215,8 +209,8 @@ void Grid::findEdges(){
                         cell->edgeExists[SOUTH] = true;
                         cell->edgeID[SOUTH] = edges.size();
                         edges.emplace_back(Edge{
-                            Vector2i{(x * CELL_SIZE),(y * CELL_SIZE) + CELL_SIZE},//start
-                            Vector2i{(x * CELL_SIZE) + CELL_SIZE, (y*CELL_SIZE) + CELL_SIZE} // end
+                            Vec2<int>{(x * CELL_SIZE),(y * CELL_SIZE) + CELL_SIZE},//start
+                            Vec2<int>{(x * CELL_SIZE) + CELL_SIZE, (y*CELL_SIZE) + CELL_SIZE} // end
                         });
                     }
                 }
@@ -273,7 +267,7 @@ void Grid::findVisibility(float ox, float oy, float radius){
                 if(j == 2){ang = base_Ang + 0.0001;}
                 VisibilityPoint point;
                 point.angle = ang;
-                point.pos = Line::getIntersection(Vector2i{static_cast<int>(ox), static_cast<int>(oy)}, ang, this, radius);
+                point.pos = Line::getIntersection(Vec2<int>{static_cast<int>(ox), static_cast<int>(oy)}, ang, this, radius);
                 visibilityPoints.emplace_back(point);
             }
     }
@@ -292,7 +286,7 @@ std::unordered_set<TargetPoint, TargetPoint::HashFunction> Grid::getUniquePoints
             float x = i == 0 ? static_cast<float>(edge.start.x) : static_cast<float>(edge.end.x);
             float y = i == 0 ? static_cast<float>(edge.start.y) : static_cast<float>(edge.end.y);
             
-            Vector2 diff = { x - ox, y - oy};
+            Vec2<float> diff = { x - ox, y - oy};
             float length = sqrt((diff.x * diff.x) + (diff.y * diff.y));
             if(length <= radius){
                 TargetPoint point(x,y);

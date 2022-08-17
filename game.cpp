@@ -1,14 +1,16 @@
 #include "game.h"
 #include "Log.h"
+#include "Mouse.h"
 
-
-Game::Game(){
+Game::Game(): 
+    m_mousePos(0.f,0.f){
     //init
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Intrusion");
     SetTargetFPS(60);
     
     //config
-    grid = new Grid({5000,5000});
+    Vec2<int> gridSize = {5000,5000};
+    grid = new Grid(gridSize);
 
     Vec2<float> playerPos = {200.f,200.f};
     float playerRadius = 10.f;
@@ -24,7 +26,6 @@ Game::~Game(){
 }
 
 void Game::run(){
-    grid = new Grid(Vector2i{5000,5000});
     while (!WindowShouldClose())
     {
         handleInput();
@@ -38,12 +39,12 @@ void Game::run(){
 void Game::handleInput(){
     if(GetMousePosition().x > 0 && GetMousePosition().x < grid->getWorldSize().x 
     && GetMousePosition().y > 0 && GetMousePosition().y < grid->getWorldSize().y){
-        mousePos = GetMousePosition();
-
+        m_mousePos = Mouse::getPosition();
+        
         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
-            grid->flipCell(mousePos);
+            grid->flipCell(m_mousePos);
         }
-        grid->findVisibility(mousePos.x, mousePos.y, 500.f);
+        grid->findVisibility(m_mousePos.x, m_mousePos.y, 500.f);
     }
 }
 
@@ -55,7 +56,7 @@ void Game::update(){
 void Game::render(){
     ClearBackground(BLACK);
     BeginDrawing();
-        grid->draw(mousePos);
+        grid->draw(m_mousePos);
         m_player->draw();
         DrawText(std::to_string(GetFPS()).c_str(), 50, 50, 50, RAYWHITE);
     EndDrawing();
