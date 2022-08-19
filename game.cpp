@@ -11,7 +11,7 @@ Game::Game():
     //config
         //Grid
     Vec2<int> gridSize = {5000,5000};
-    grid = new Grid(gridSize);
+    m_grid = new Grid(gridSize);
         //Player
     Vec2<float> playerPos = {200.f,200.f};
     float playerRadius = 10.f;
@@ -23,7 +23,7 @@ Game::Game():
 
 Game::~Game(){
     delete m_player;
-    delete grid;
+    delete m_grid;
 }
 
 void Game::run(){
@@ -38,27 +38,29 @@ void Game::run(){
 }
 
 void Game::handleInput(){
-    if(GetMousePosition().x > 0 && GetMousePosition().x < grid->getWorldSize().x 
-    && GetMousePosition().y > 0 && GetMousePosition().y < grid->getWorldSize().y){
-        m_mousePos = Mouse::getPosition();
-        
-        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
-            grid->flipCell(m_mousePos);
+    m_mousePos = Mouse::getPosition();
+    if(m_grid->isWithinWorldSize(m_mousePos)){
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+            m_grid->flipCell(m_mousePos);
         }
-        m_player->handleInput();
-        grid->findVisibility(m_mousePos.x, m_mousePos.y, 500.f);
     }
+
+    m_player->handleInput();
 }
 
 void Game::update(){
     float dt = GetFrameTime();
     m_player->update(dt);
+
+    if(m_grid->isWithinWorldSize(m_player->getPos())){
+        m_grid->findVisibility(m_player->getPos().x, m_player->getPos().y, 500.f);
+    }
 }
 
 void Game::render(){
     ClearBackground(BLACK);
     BeginDrawing();
-        grid->draw(m_mousePos);
+        m_grid->draw(m_player->getPos());
         m_player->draw();
         DrawText(std::to_string(GetFPS()).c_str(), 50, 50, 50, RAYWHITE);
     EndDrawing();

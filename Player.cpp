@@ -26,9 +26,7 @@ void Player::update(float dt){
 }
 
 void Player::draw()const{
-    int xCenter = static_cast<int>(m_pos.x / m_radius);
-    int yCenter = static_cast<int>(m_pos.y / m_radius);
-    DrawCircle(xCenter, yCenter, m_radius, GREEN);
+    DrawCircle(getPos().x, getPos().y, m_radius, GREEN);
 }
 
 void Player::onKeyDown(){

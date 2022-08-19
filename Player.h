@@ -5,7 +5,7 @@
 #include "Entity.h"
 #include "Movement.h"
 
-class Player : Entity{
+class Player : public Entity{
 public:
     Player(Vec2<float> _pos, float _radius, float _speed);
     ~Player();
