@@ -9,12 +9,13 @@ Game::Game():
     SetTargetFPS(60);
     
     //config
+        //Grid
     Vec2<int> gridSize = {5000,5000};
     grid = new Grid(gridSize);
-
+        //Player
     Vec2<float> playerPos = {200.f,200.f};
     float playerRadius = 10.f;
-    float playerSpeed = 100.f;
+    float playerSpeed = 1000.f;
     m_player = new Player(playerPos, playerRadius, playerSpeed);
 
     //debug
@@ -44,6 +45,7 @@ void Game::handleInput(){
         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
             grid->flipCell(m_mousePos);
         }
+        m_player->handleInput();
         grid->findVisibility(m_mousePos.x, m_mousePos.y, 500.f);
     }
 }

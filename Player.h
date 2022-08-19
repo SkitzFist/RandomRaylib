@@ -22,7 +22,7 @@ private:
     Movement* m_movement;
 
     void onKeyDown();
-    void onKeyUp();
+    void onKeyReleased();
 };
 
 #endif

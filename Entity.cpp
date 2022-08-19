@@ -1,11 +1,10 @@
 #include "Entity.h"
 
-    Entity::Entity(){
+Entity::Entity(){
     
 }
 
 Entity::~Entity(){
-
 }
 
 const Vec2<float>& Entity::getPos() const{
