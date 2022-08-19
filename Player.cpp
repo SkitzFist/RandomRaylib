@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "include/raylib.h"
 #include "SimpleMovement.h"
+#include <math.h>
 
 //debug
 #include "Log.h"
@@ -57,6 +58,13 @@ void Player::onKeyDown(){
         }else if(IsKeyPressed(KEY_S)){
             m_dir.y = 1.f;
         }
+    }
+    float absX = abs(m_dir.x);
+    float absY = abs(m_dir.y);
+    if(absX == 1.f && absY == 1.f){
+        float length = static_cast<float>(sqrt((m_dir.x * m_dir.x) + (m_dir.y * m_dir.y)));
+        m_dir.x /= length;
+        m_dir.y /= length;
     }
 }
 

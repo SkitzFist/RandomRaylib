@@ -15,7 +15,7 @@ Game::Game():
         //Player
     Vec2<float> playerPos = {200.f,200.f};
     float playerRadius = 10.f;
-    float playerSpeed = 1000.f;
+    float playerSpeed = 200.f;
     m_player = new Player(playerPos, playerRadius, playerSpeed);
 
     //debug
