@@ -107,7 +107,7 @@ private:
     Cell* cells;
     std::vector<Edge> edges;
     std::vector<VisibilityPoint> visibilityPoints;
-    static constexpr int CELL_SIZE = 32;
+    static constexpr int CELL_SIZE = 64;
     static constexpr int NORTH = 0;
     static constexpr int SOUTH = 1;
     static constexpr int EAST = 2;

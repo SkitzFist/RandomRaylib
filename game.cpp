@@ -60,8 +60,11 @@ void Game::update(){
 void Game::render(){
     ClearBackground(BLACK);
     BeginDrawing();
+        //BeginMode2D(); // add camera
         m_grid->draw(m_player->getPos());
         m_player->draw();
+        EndMode2D();
+        
         DrawText(std::to_string(GetFPS()).c_str(), 50, 50, 50, RAYWHITE);
     EndDrawing();
 }

@@ -59,6 +59,7 @@ void Player::onKeyDown(){
             m_dir.y = 1.f;
         }
     }
+    
     float absX = abs(m_dir.x);
     float absY = abs(m_dir.y);
     if(absX == 1.f && absY == 1.f){
